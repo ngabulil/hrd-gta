@@ -7,6 +7,9 @@ import { Modal } from "@mui/material";
 import dayjs from "dayjs";
 import clsx from "clsx";
 import Swal from "sweetalert2";
+import NewsSection from "../../components/NewsSection";
+
+
 
 const Home = () => {
   const [news, setNews] = React.useState([]);
@@ -23,6 +26,7 @@ const Home = () => {
   const [open, setOpen] = React.useState(true);
   const [openDetail, setOpenDetail] = React.useState(false);
   const [openTraining, setOpenTraining] = React.useState(false);
+  
 
   const handleOpenDetail = (item, type) => {
     if (type === "training") {
@@ -56,64 +60,8 @@ const Home = () => {
         icon: "error",
         title: "Error",
         text: error.response.data.error.message,
-      });
+      })
     }
-  };
-  const handleReadMoreNews = (item) => {
-    const filterItem = {
-      ...item,
-      isOpen: true,
-    };
-    setNews(
-      news.map((newsItem) => {
-        if (newsItem.id === item.id) {
-          return filterItem;
-        }
-        return newsItem;
-      })
-    );
-  };
-  const handleReadMoreTraining = (item) => {
-    const filterItem = {
-      ...item,
-      isOpen: true,
-    };
-    setTrainings(
-      trainings.map((trainingItem) => {
-        if (trainingItem.id === item.id) {
-          return filterItem;
-        }
-        return trainingItem;
-      })
-    );
-  };
-  const handleCollapseNews = (item) => {
-    const filterItem = {
-      ...item,
-      isOpen: false,
-    };
-    setNews(
-      news.map((newsItem) => {
-        if (newsItem.id === item.id) {
-          return filterItem;
-        }
-        return newsItem;
-      })
-    );
-  };
-  const handleCollapseTraining = (item) => {
-    const filterItem = {
-      ...item,
-      isOpen: false,
-    };
-    setTrainings(
-      trainings.map((trainingItem) => {
-        if (trainingItem.id === item.id) {
-          return filterItem;
-        }
-        return trainingItem;
-      })
-    );
   };
 
   React.useEffect(() => {
@@ -206,165 +154,42 @@ const Home = () => {
         </section>
 
         {/* News Section */}
-        <section className="mb-16">
-          <h2 className="text-lg font-semibold mb-6">News</h2>
+        <h2 className="text-lg font-semibold mb-6">Recent News</h2>
+        <NewsSection posts={news} onSelectPost={handleOpenDetail} />
 
-          {/* Highlighted Article */}
-          <div className="md:flex gap-6 mb-10">
-            <div className="bg-gray-300 w-full h-[250px] md:w-[50%]">
-              <img
-                src={`${baseHost}${news[0]?.picture?.url}`}
-                alt=""
-                className="size-full"
-              />
-            </div>
-            <div className="mt-4 flex md:mt-0 md:w-[50%]">
-              <div className="flex flex-col justify-between">
-                <h3 className="text-xl font-bold">Berita Terbaru Hari Ini</h3>
-                <h2
-                  className="font-semibold text-lg"
-                  onClick={() => handleOpenDetail(news[0])}
-                >
-                  {news[0]?.title}
-                </h2>
-                <p
-                  className={clsx("text-gray-600", {
-                    "line-clamp-2": !news[0]?.isOpen,
-                  })}
-                >
-                  {news[0]?.description}
-                </p>
-                <p className="text-sm">Tanggal: 2025-03-19</p>
-                <button
-                  onClick={() => {
-                    if (news[0]?.isOpen) {
-                      handleCollapseNews(news[0]);
-                    } else {
-                      handleReadMoreNews(news[0]);
-                    }
-                  }}
-                  className="mt-4 px-5 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
-                >
-                  {news[0]?.isOpen ? "Hide Detail" : "See More"}
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* Grid Artikel */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {news.slice(1).map((item, i) => (
-              <div key={i} className="bg-white rounded shadow p-2 h-fit">
-                <div className="bg-gray-300 w-full h-[200px]">
-                  <img
-                    src={`${baseHost}${item.picture?.url}`}
-                    className="size-full"
-                  />
-                </div>
-                <h4
-                  className="text-sm font-semibold mt-2 cursor-pointer"
-                  onClick={() => handleOpenDetail(item)}
-                >
-                  {item.title}
-                </h4>
-                <p className="text-xs text-gray-500">
-                  Tanggal: {dayjs(item.createdAt).format("YYYY-MM-DD HH:mm:ss")}
-                </p>
-                <p
-                  className={clsx("text-gray-600 mt-2", {
-                    hidden: !item.isOpen,
-                  })}
-                >
-                  {item.description}
-                </p>
-                <button
-                  onClick={() => {
-                    if (item.isOpen) {
-                      handleCollapseNews(item);
-                    } else {
-                      handleReadMoreNews(item);
-                    }
-                  }}
-                  className="mt-4 px-5 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition w-full"
-                >
-                  {item.isOpen ? "Hide Detail" : "See More"}
-                </button>
-              </div>
-            ))}
-          </div>
-
-          {/* Banner */}
-          <div className="bg-gray-300 w-full h-[300px] mt-10 rounded flex">
-            <Swiper
-              spaceBetween={30}
-              centeredSlides={true}
-              autoplay={{
-                delay: 2500,
-                disableOnInteraction: false,
-              }}
-              pagination={{
-                clickable: true,
-              }}
-              navigation={true}
-              modules={[Autoplay, Pagination]}
-              className="mySwiper"
-            >
-              {news.slice(0, 5).map((item, i) => (
-                <SwiperSlide key={i}>
-                  <img
-                    src={`${baseHost}${item.picture?.url}`}
-                    className="size-full cursor-pointer"
-                    onClick={() => handleOpenDetail(item)}
-                  />
-                </SwiperSlide>
-              ))}
-            </Swiper>
-          </div>
-        </section>
 
         {/* Training Section */}
         <section className="mb-20">
           <h2 className="text-lg font-semibold mb-6">Training</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {trainings.map((item, i) => (
-              <div key={i} className="bg-white rounded shadow p-2 h-fit">
-                <div className="bg-gray-300 w-full h-[200px]">
-                  <img
-                    src={`${baseHost}${item.picture?.url}`}
-                    className="size-full"
-                  />
-                </div>
-                <h4
-                  className="text-sm font-semibold mt-2 cursor-pointer"
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {trainings.map((item, i) => (
+                <div
+                  key={i}
+                  className="bg-white rounded-xl overflow-hidden shadow hover:shadow-md transition-shadow cursor-pointer"
                   onClick={() => handleOpenDetail(item, "training")}
                 >
-                  {item.title}
-                </h4>
-                <p className="text-xs text-gray-500">
-                  Tanggal: {dayjs(item.createdAt).format("YYYY-MM-DD HH:mm:ss")}
-                </p>
-                <p
-                  className={clsx("text-gray-600 mt-2", {
-                    hidden: !item.isOpen,
-                  })}
-                >
-                  {item.description}
-                </p>
-                <button
-                  onClick={() => {
-                    if (item.isOpen) {
-                      handleCollapseTraining(item);
-                    } else {
-                      handleReadMoreTraining(item);
-                    }
-                  }}
-                  className="mt-4 px-5 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition w-full"
-                >
-                  {item.isOpen ? "Hide Detail" : "See More"}
-                </button>
-              </div>
-            ))}
-          </div>
+                  {/* Image */}
+                  <div className="relative w-full aspect-[16/9] bg-gray-200">
+                    <img
+                      src={`${baseHost}${item.picture.url}`}
+                      alt={item.title}
+                      className="absolute inset-0 w-full h-full object-cover"
+                    />
+                  </div>
+
+                  {/* Text Content */}
+                  <div className="p-4">
+                    <h4 className="text-base font-semibold text-gray-800 truncate">
+                      {item.title}
+                    </h4>
+                    <p className="text-xs text-gray-500 mt-1">
+                      Tanggal: {dayjs(item.createdAt).format("YYYY-MM-DD HH:mm:ss")}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
         </section>
       </div>
 
@@ -419,14 +244,14 @@ const Home = () => {
 
       {/* modal detail */}
       <Modal open={openDetail} disableAutoFocus>
-        <div className="bg-white w-[80%] p-3 rounded max-h-[90vh] overflow-auto shadow-md absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 md:w-[60%] md:p-6">
+        <div className="bg-white w-[70%] max-h-[90vh] p-2 overflow-auto rounded shadow-md absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 md:w-[60%] md:p-6">
           {/* Gambar (jika ada) */}
-          {selectedNews?.picture?.url && (
-            <div className="w-full h-[200px] mb-4 rounded overflow-hidden bg-gray-100 md:h-[300px]">
+          {selectedNews?.picture.url && (
+            <div className="w-full max-h-[500px] bg-gray-100 flex items-center justify-center overflow-hidden rounded mb-4">
               <img
-                src={`${baseHost}${selectedNews.picture?.url}`}
+                src={`${baseHost}${selectedNews.picture.url}`}
                 alt={selectedNews.title}
-                className="w-full h-full"
+                className="object-contain max-h-[500px] w-auto"
               />
             </div>
           )}
@@ -449,14 +274,14 @@ const Home = () => {
 
       {/* modal detail training */}
       <Modal open={openTraining} disableAutoFocus>
-        <div className="bg-white w-[70%] p-3 rounded shadow-md absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 md:w-[60%] md:p-6">
+        <div className="bg-white w-[70%] max-h-[90vh] p-2 overflow-auto rounded shadow-md absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 md:w-[60%] md:p-6">
           {/* Gambar (jika ada) */}
-          {selectedTraining?.picture?.url && (
-            <div className="w-full h-[200px] mb-4 rounded overflow-hidden bg-gray-100 md:h-[300px]">
+          {selectedTraining?.picture.url && (
+            <div className="relative w-full aspect-[16/9] rounded overflow-hidden bg-gray-100 mb-4">
               <img
-                src={`${baseHost}${selectedTraining.picture?.url}`}
+                src={`${baseHost}${selectedTraining.picture.url}`}
                 alt={selectedTraining.title}
-                className="w-full h-full"
+                className="absolute inset-0 w-full h-full object-cover"
               />
             </div>
           )}
