@@ -11,3 +11,7 @@ body,
 .swal2-container {
   z-index: 1600;
 }
+
+#thinkstack-chat-window-toggler {
+  z-index: 100 !important;
+}
