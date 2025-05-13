@@ -9,8 +9,6 @@ import clsx from "clsx";
 import Swal from "sweetalert2";
 import NewsSection from "../../components/NewsSection";
 
-
-
 const Home = () => {
   const [news, setNews] = React.useState([]);
   const [trainings, setTrainings] = React.useState([]);
@@ -26,7 +24,6 @@ const Home = () => {
   const [open, setOpen] = React.useState(true);
   const [openDetail, setOpenDetail] = React.useState(false);
   const [openTraining, setOpenTraining] = React.useState(false);
-  
 
   const handleOpenDetail = (item, type) => {
     if (type === "training") {
@@ -60,7 +57,7 @@ const Home = () => {
         icon: "error",
         title: "Error",
         text: error.response.data.error.message,
-      })
+      });
     }
   };
 
@@ -157,39 +154,38 @@ const Home = () => {
         <h2 className="text-lg font-semibold mb-6">Recent News</h2>
         <NewsSection posts={news} onSelectPost={handleOpenDetail} />
 
-
         {/* Training Section */}
         <section className="mb-20">
           <h2 className="text-lg font-semibold mb-6">Training</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {trainings.map((item, i) => (
-                <div
-                  key={i}
-                  className="bg-white rounded-xl overflow-hidden shadow hover:shadow-md transition-shadow cursor-pointer"
-                  onClick={() => handleOpenDetail(item, "training")}
-                >
-                  {/* Image */}
-                  <div className="relative w-full aspect-[16/9] bg-gray-200">
-                    <img
-                      src={`${baseHost}${item.picture.url}`}
-                      alt={item.title}
-                      className="absolute inset-0 w-full h-full object-cover"
-                    />
-                  </div>
-
-                  {/* Text Content */}
-                  <div className="p-4">
-                    <h4 className="text-base font-semibold text-gray-800 truncate">
-                      {item.title}
-                    </h4>
-                    <p className="text-xs text-gray-500 mt-1">
-                      Tanggal: {dayjs(item.createdAt).format("YYYY-MM-DD HH:mm:ss")}
-                    </p>
-                  </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {trainings.map((item, i) => (
+              <div
+                key={i}
+                className="bg-white rounded-xl overflow-hidden shadow hover:shadow-md transition-shadow cursor-pointer"
+                onClick={() => handleOpenDetail(item, "training")}
+              >
+                {/* Image */}
+                <div className="relative w-full aspect-[16/9] bg-gray-200">
+                  <img
+                    src={`${baseHost}${item.picture.url}`}
+                    alt={item.title}
+                    className="absolute inset-0 w-full h-full object-cover"
+                  />
                 </div>
-              ))}
-            </div>
 
+                {/* Text Content */}
+                <div className="p-4">
+                  <h4 className="text-base font-semibold text-gray-800 truncate">
+                    {item.title}
+                  </h4>
+                  <p className="text-xs text-gray-500 mt-1">
+                    Tanggal:{" "}
+                    {dayjs(item.createdAt).format("YYYY-MM-DD HH:mm:ss")}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
         </section>
       </div>
 
@@ -248,11 +244,19 @@ const Home = () => {
           {/* Gambar (jika ada) */}
           {selectedNews?.picture.url && (
             <div className="w-full max-h-[500px] bg-gray-100 flex items-center justify-center overflow-hidden rounded mb-4">
-              <img
-                src={`${baseHost}${selectedNews.picture.url}`}
-                alt={selectedNews.title}
-                className="object-contain max-h-[500px] w-auto"
-              />
+              {selectedNews.video ? (
+                <video
+                  src={`${baseHost}${selectedNews.video.url}`}
+                  controls
+                  className="object-contain max-h-[500px] w-auto"
+                />
+              ) : (
+                <img
+                  src={`${baseHost}${selectedNews.picture.url}`}
+                  alt={selectedNews.title}
+                  className="object-contain max-h-[500px] w-auto"
+                />
+              )}
             </div>
           )}
 

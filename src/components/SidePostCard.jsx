@@ -1,8 +1,10 @@
 import React from "react";
 import dayjs from "dayjs";
 import { baseHost } from "../services/api";
+import PlayCircle from "../assets/play-circle.svg";
 
 const SidePostCard = ({ post, onClick, expandedPostId, setExpandedPostId }) => {
+  const isVideo = post.video;
   return (
     <div
       className="flex gap-4 cursor-pointer group"
@@ -10,11 +12,24 @@ const SidePostCard = ({ post, onClick, expandedPostId, setExpandedPostId }) => {
     >
       {/* Image */}
       <div className="w-24 h-24 overflow-hidden rounded">
-        <img
-          src={`${baseHost}${post.picture.url}`}
-          alt={post.title}
-          className="w-full h-full object-cover"
-        />
+        {isVideo ? (
+          <div className="relative size-full">
+            <img
+              src={`${baseHost}${post.picture.url}`}
+              alt={post.title}
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+              <img src={PlayCircle} className="size-[24px]" alt="Play" />
+            </div>
+          </div>
+        ) : (
+          <img
+            src={`${baseHost}${post.picture.url}`}
+            alt={post.title}
+            className="w-full h-full object-cover"
+          />
+        )}
       </div>
 
       {/* Text Content */}
@@ -36,7 +51,6 @@ const SidePostCard = ({ post, onClick, expandedPostId, setExpandedPostId }) => {
             ? post.description
             : `${post.description.slice(0, 100)}...`}
         </p>
-
 
         {/* "See more / less" toggle */}
         {post.description.length > 100 && (
