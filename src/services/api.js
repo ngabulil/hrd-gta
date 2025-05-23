@@ -1,7 +1,7 @@
 import axios from "axios";
 
-// export const baseHost = "https://api.gta.education";
-export const baseHost = "http://localhost:1337";
+export const baseHost = "https://api.gta.education";
+// export const baseHost = "http://localhost:1337";
 const BASE_URL = `${baseHost}/api`;
 
 const get = async (url) => {
