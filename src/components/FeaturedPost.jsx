@@ -34,7 +34,7 @@ const FeaturedPost = ({ post, onClick }) => {
       <h2 className="text-2xl font-bold group-hover:underline mt-1">
         {post.title}
       </h2>
-      <p className="text-sm text-gray-600 line-clamp-2 mt-1">
+      <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2 mt-1">
         {post.description}
       </p>
     </div>

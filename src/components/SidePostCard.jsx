@@ -37,13 +37,13 @@ const SidePostCard = ({ post, onClick, expandedPostId, setExpandedPostId }) => {
         <p className="text-xs text-blue-500">
           {dayjs(post.createdAt).format("MMM D, YYYY")}
         </p>
-        <h3 className="text-sm font-semibold group-hover:underline">
+        <h3 className="text-sm font-semibold group-hover:underline dark:text-white">
           {post.title}
         </h3>
 
         {/* Description preview or full */}
         <p
-          className={`text-sm text-gray-700 mt-2 ${
+          className={`text-sm text-gray-700 dark:text-gray-300 mt-2 ${
             expandedPostId === post.id ? "line-clamp-4" : "line-clamp-2"
           }`}
         >
@@ -59,7 +59,7 @@ const SidePostCard = ({ post, onClick, expandedPostId, setExpandedPostId }) => {
               e.stopPropagation(); // prevent triggering the modal
               setExpandedPostId(expandedPostId === post.id ? null : post.id);
             }}
-            className="mt-1 text-sm text-blue-600 hover:underline"
+            className="mt-1 text-sm text-blue-600 dark:text-blue-400 hover:underline"
           >
             {expandedPostId === post.id ? "See less" : "See more"}
           </button>
